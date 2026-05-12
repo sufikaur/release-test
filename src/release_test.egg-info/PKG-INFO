@@ -1,3 +1,12 @@
+Metadata-Version: 2.4
+Name: release-test
+Version: 0.1.dev2+g61dee99a3.d20260512
+Summary: Test Python package for branch-based release/versioning experiments with setuptools_scm
+Author: sufikaur
+License-Expression: MIT
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+
 # release-test
 
 A minimal test Python package used to experiment with branch-based release workflows and automatic versioning via `setuptools_scm`.

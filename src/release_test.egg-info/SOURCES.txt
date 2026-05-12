@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+src/release_test/__init__.py
+src/release_test.egg-info/PKG-INFO
+src/release_test.egg-info/SOURCES.txt
+src/release_test.egg-info/dependency_links.txt
+src/release_test.egg-info/top_level.txt
