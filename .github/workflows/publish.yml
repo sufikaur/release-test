@@ -1,0 +1,82 @@
+name: Create and Publish PyPI package
+
+on:
+  push:
+    tags:
+      - "*"
+
+defaults:
+  run:
+    shell: bash -l {0}
+
+env:
+  PIP_PROGRESS_BAR: 'off'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+     - name: Checkout code to be packaged
+       uses: actions/checkout@v4
+       with:
+         fetch-depth: 0
+
+     - uses: actions/setup-python@v5
+       with:
+         python-version: '3.11'
+
+     - name: Generate dist files
+       run: |
+         pip install build wheel
+         python -m build --wheel --outdir dist/
+
+     - name: Upload dist files as artifact
+       uses: actions/upload-artifact@v4
+       with:
+         name: dist
+         path: dist/
+         retention-days: 1
+
+  test-whl:
+    needs: [build]
+    name: Test release-test from .whl file
+    runs-on: ubuntu-latest
+
+    steps:
+     - uses: actions/download-artifact@v4
+       with:
+         name: dist
+         path: dist
+
+     - name: Set up Python
+       uses: actions/setup-python@v5
+       with:
+         python-version: '3.11'
+
+     - name: Install from .whl file
+       run: |
+         whl_file="$(ls dist/*.whl)"
+         pip install "${whl_file}"
+
+     - name: Check that installed package has the expected tag
+       run: |
+         pip install packaging
+         python -c '
+         import sys
+         from importlib.metadata import version
+         from packaging.version import Version
+
+         name = sys.argv[1]
+         tag = sys.argv[2]
+         normalized_tag = str(Version(tag))
+         pkg_version = version(name)
+
+         print(f"{name=}\n{tag=}\n{normalized_tag=}\n{pkg_version=}")
+         assert version(name) == normalized_tag
+         ' "release-test" "${{ github.ref_name }}"
+
+     - name: Run tests
+       working-directory: /tmp
+       run: |
+         python -c "import release_test"
