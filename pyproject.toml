@@ -3,7 +3,7 @@ build-backend = "setuptools.build_meta"
 requires = ["setuptools >= 64", "setuptools_scm >= 8"]
 
 [project]
-name = "release-tesr"
+name = "release-test"
 dynamic = ["version"]
 description = "A test package for practicing release branch + automated PyPI publishing"
 readme = { file = "README.md", content-type = "text/markdown" }
