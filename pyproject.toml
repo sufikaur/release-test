@@ -14,6 +14,16 @@ requires-python = ">=3.11"
 where = ["src"]
 
 [tool.setuptools_scm]
-version_scheme = "guess-next-dev"
+# Writes version into a _version.py at build time — lets you access it at runtime
+version_file = "src/release_test/_version.py"
+
+# Best scheme for your release-branch workflow:
+# - On a release branch: increments patch/pre-release segment
+# - On other branches: increments minor, appends .devN
+version_scheme = "semver-pep440-release-branch"
+
+# REQUIRED for PyPI — strips local +gABCDEF hash from version string
 local_scheme = "no-local-version"
+
+# Safety net when building outside of git (e.g. sdist without .git/)
 fallback_version = "0.0.0"

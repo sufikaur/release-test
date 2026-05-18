@@ -6,4 +6,3 @@ try:
     __version__ = version("release-test")
 except PackageNotFoundError:  # pragma: no cover
     __version__ = "0.0.0"
-
